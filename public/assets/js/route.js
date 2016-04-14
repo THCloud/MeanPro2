@@ -15,14 +15,14 @@ angular.module('myApp')
         '$locationProvider',
         function($routeProvider, $locationProvider) {
             $routeProvider
-                .when('/', {
-                    templateUrl: '/public/assets/views/index.html',
-                    controller: 'indexCtrl',
-                })
-                .when('/error', {
-                    templateUrl: '/public/assets/views/error.html',
-                    controller: 'errorCtrl',
-                })
+                // .when('/', {
+                //     templateUrl: './public/index.html',
+                //     controller: 'indexCtrl',
+                // })
+                // .when('/error', {
+                //     templateUrl: './public/error.html',
+                //     controller: 'errorCtrl',
+                // })
                 .otherwise({
                     redirectTo: '/'
                 });

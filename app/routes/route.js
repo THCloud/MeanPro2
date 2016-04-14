@@ -5,7 +5,7 @@ router.get('/', function (req, res, next) {
 	console.log('======================================');
 	console.log('success !');
 	console.log('======================================');
-	res.sendFile('assets/views/index.html')
+	res.sendFile('./public/index.html');
 });
 
 
@@ -13,7 +13,7 @@ router.get('/error', function (req, res, next) {
 	console.log('======================================');
 	console.log('render the error page');
 	console.log('======================================');
-	// res.render('error.jade');
+	res.sendFile('./public/error.html');
 });
 
 router.post('/error', function (req, res, next) {
