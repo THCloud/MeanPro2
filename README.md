@@ -20,8 +20,8 @@
 
 ## Usage
 
-1. `npm install & bower install   //下载bower跟npm依赖`
-2. `gulp  //启动`
+1. `npm install & bower install   //you may not need this as I have upload them`
+2. `gulp  //start it`
 
 Open your browser, and input   127.0.0.1:3000 	
 
