@@ -27,4 +27,7 @@ Open your browser, and input   127.0.0.1:3000
 
 
 ## Comments
-This project hasn't finished yet!
+
+If without template engine, express still need to provide an api to send HTML files. And angular's route means nothing here.
+
+This project hasn't finished yet! BUG in it!
