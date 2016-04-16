@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" ng-app="myApp">
+	<head>
+		<title>myApp</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="mean spa">
+		<meta name="author" content="thcloud">
+		<base href="/">
+		<link rel="stylesheet" href="dist/css/main.min.css">
+	</head>
+	<body ng-controller="layoutCtrl">
+		<nav class="navbar navbar-inverse navbar-fixed-top" ng-include='"/navbar.html"'></nav>
+
+		<div ng-view></div>
+		
+		<footer class="navbar navbar-inverse" id="about" ng-include='"/footer.html"' style="margin-bottom: 0px;"></footer>
+	</body>
+	<script src="dist/js/app.min.js"></script>
+</html>
