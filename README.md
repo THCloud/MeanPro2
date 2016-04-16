@@ -12,15 +12,13 @@
 
 **app** server files and ops.
 
-**bin** start the project
-
 **config** build-config.js (for gulp)，db-config.js (for mongodb // haven't write it.)
 
 **public** css, js, html。
 
 ## Usage
 
-1. `npm install & bower install   //you may not need this as I have upload them`
+1. `npm install & bower install   //download dependencies `
 2. `gulp  //start it`
 
 Open your browser, and input   127.0.0.1:3000 	
@@ -28,6 +26,4 @@ Open your browser, and input   127.0.0.1:3000
 
 ## Comments
 
-If without template engine, express still need to provide an api to send HTML files. And angular's route means nothing here.
-
-This project hasn't finished yet! BUG in it!
+This project hasn't finished yet! only 2 demo page in it!
