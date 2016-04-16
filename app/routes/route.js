@@ -1,16 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-// var bodyParser = require('body-parser');
-
-// router.use(bodyParser.json());
-// router.use(bodyParser.urlencoded({ extended: true }));
 
 
 router.get('/main', function (req, res, next) {
 	console.log('I send the main.html to the FE');	
 });
-
 
 router.get('/error', function (req, res, next) {
 	console.log('======================================');
@@ -26,7 +21,6 @@ router.post('/error', function (req, res, next) {
 	var data = { state: 'success' };
 	res.send(data);
 });
-
 
 
 module.exports = router;

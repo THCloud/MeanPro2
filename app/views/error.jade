@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	.container(ng-controller="errorCtrl")
+		.jumbotron
+			h1 Error Page
+			.alert.alert-danger(role="alert") 这是错误页示例，可以查查console有没有输出什么破玩意
+			a.btn.btn-success.btn-lg(href="/", style="margin-right:30px;") 试试跳到index
+			a.btn.btn-primary.btn-lg(ng-click="send()") 发个ajax看看
