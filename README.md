@@ -12,7 +12,7 @@
 
 **app** server files and ops.
 
-**config** build-config.js (for gulp)，db-config.js (for mongodb // haven't write it.)
+**config** include configuration files like db, gulp, session.
 
 **public** css, js, html。
 
@@ -26,4 +26,4 @@ Open your browser, and input   127.0.0.1:3000
 
 ## Comments
 
-This project hasn't finished yet! only 2 demo page in it!
+bug fixing. Still have some bugs in details.
