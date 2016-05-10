@@ -10,7 +10,6 @@ var del = require('del');
 var jshint = require('gulp-jshint');
 var config = require('./config/build-config.js');
 
-// 是不是能用bower的override替换掉这个？
 gulp.task('copy', function() {
     return gulp.src(config().srcFiles.copy)
         .pipe(gulp.dest(config().buildPath.copy));

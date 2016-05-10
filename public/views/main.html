@@ -1,0 +1,58 @@
+<header class="jumbotron subhead">
+	<div class="container">
+		<h1>Index Page</h1> 
+		<p class="lead">
+			<hr>
+		</p>
+		<p class="lead">
+			这里可以随便说点介绍啊，公告啊一类的话
+		</p>
+		<p class="lead">
+			我们直接用这个页面显示所有的task了,或者可以根据tag来切换任务
+		</p>
+	</div>
+</header>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-9">
+			<div class="page-header" style="margin-top: 0">
+				<h1>全部任务</h1>
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="task in tasks">
+					<h3 class="list-group-item-heading">
+						<a ng-href="/task/{{task._id}}" ng-class="{disabled: !redirectAble}">{{ task.taskName }}</a>
+					</h3>
+					<p class="list-group-item-text">{{ task.description }}</p>
+				</li>
+			</ul>
+		</div>
+		<nav class="col-sm-3">
+			<ul class="nav list-group" style="margin-top: 18px">
+				<li class="list-group-item active" data-toggle="tab" ng-click="toggleTag()">全部</li>
+				<li class="list-group-item" data-toggle="tab" ng-repeat="tag in tags" ng-click="toggleTag(tag)">{{ tag.tagName }}</li>
+			</ul>
+		</nav>
+	</div>
+	<nav ng-show="false">
+		<ul class="pagination">
+			<li>
+				<a href="" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<li class="active" data-toggle="tab">
+				<a href="">1</a>
+			</li>
+			<li data-toggle="tab"><a>2</a></li>
+			<li data-toggle="tab"><a>3</a></li>
+			<li data-toggle="tab"><a>4</a></li>
+			<li data-toggle="tab"><a>5</a></li>
+			<li>
+				<a aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div>

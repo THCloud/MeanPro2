@@ -1,0 +1,27 @@
+<header class="jumbotron subhead">
+	<div class="container">
+		<h1>Tag Edit</h1> 
+		<p class="lead">
+			<hr>
+		</p>
+		<p class="lead">
+			标签编辑界面，可以添加或者修改标签
+		</p>
+	</div>
+</header>
+<div class="container">
+	<div class="page-header">
+		<h1>标签编辑</h1>
+	</div>
+	<form name="tagEditForm" style="margin-bottom: 40px;" novalidate>
+		<div class="form-group">
+			<label for="tagname" class="col-sm-1">标签名</label>
+			<div class="col-sm-3">
+				<input type="text" class="form-control" name="tagname" placeholder="标签名" ng-model="tag.tagName">
+			</div>
+		</div>
+		<button class="btn btn-success" ng-show="pattern=='add'" ng-click="addTag()" ng-disabled="tagEditForm.tagname.$invalid">添加标签</button>
+		<button class="btn btn-primary" ng-show="pattern=='edit'" ng-click="updateTag()" ng-disabled="tagEditForm.tagname.$invalid">修改标签</button>
+		<button class="btn btn-danger" ng-show="pattern=='edit'" ng-click="deleteTag()">删除标签</button>		
+	</form>
+</div>

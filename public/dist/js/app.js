@@ -43942,38 +43942,35 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-var myApp = angular.module('myApp', ['ngRoute']);
+var services = angular.module('myApp.services', []);
+var myApp = angular.module('myApp', ['ngRoute', 'myApp.services']);
 
 /**
- *  ./public/assets/js/controller/errorCtrl.js
+ *  ./public/assets/js/controller/adminCtrl.js
  *
- *  @file    this controller is for error page.
+ *  @file    this controller is for admin login page.
  *
  *  @author  TH_Cloud
  *	
  */
 
 
-myApp.controller('errorCtrl', [
+myApp.controller('adminCtrl', [
 		'$scope',
+		'$rootScope',
 		'$timeout',
-		'$http',
-		function($scope, $timeout, $http){
-			$scope.send = ajaxReq;
-
-			function ajaxReq() {
-				var data = {
-					id: 1,
-					text: 'Fenrisulfr'
-				};
-				$http.post('/error', data)
-					.then(function successCB(res) {
-						console.log(res.data);
-					}, function errorCB(res) {
-						console.log(res.data);
-					});
-			}		
-
+		'$location',
+		'AuthService',
+		function($scope, $rootScope, $timeout, $location, AuthService){
+			$scope.adminLogin = function (credentials) {
+				AuthService.adminLogin(credentials)
+						.then(function (data) {
+							$location.path('/main');
+							$rootScope.$broadcast('refresh');							
+						}, function (data) {
+							alert('登录失败');
+						});
+			};
 	}]);
 /**
  *  ./public/assets/js/controller/indexCtrl.js
@@ -43987,14 +43984,60 @@ myApp.controller('errorCtrl', [
 
 myApp.controller('indexCtrl', [
 		'$scope',
+		'$http',
+		'AuthService',
 		'$timeout',
-		function($scope, $timeout){
-		
-			function _init() {
-				console.log('wakaka, test');
+		function($scope, $http, AuthService, $timeout){
+			$scope.tasks = [];
+			$scope.tags = [];
+			$scope.redirectAble = AuthService.isLogined();
+
+			$scope.toggleTag = function (tag) {
+				if (tag) {
+					$http.get('/task/' + tag.tagName)
+						.then(function (res) {
+							$scope.tasks = res.data;
+						}, function (res) {	
+							alert('network error. toggle tag failed.');
+						});					
+				} else {
+					fetchTasks();
+				}
+			};
+
+			$scope.togglePage = function (pageNum) {
+
+			};
+			
+			$scope.$on('refresh', function () {
+				$scope.redirectAble = AuthService.isLogined();
+			});
+
+			function fetchTasks() {
+				$http.get('/task')
+					.then(function (res) {
+						$scope.tasks = res.data;
+					}, function (res) {
+						alert('network error. get tasks failed.');
+					});
 			}
 
+			function fetchTags() {
+				$http.get('/tag')
+					.then(function (res) {
+						$scope.tags = res.data;			
+					}, function (res) {	
+						alert('network error. fetch tag failed');
+					});
+			}
+
+			function _init() {
+				fetchTasks();
+				fetchTags();
+			}
+			
 			_init();
+
 	}]);
 /**
  *  ./public/assets/js/controller/layoutCtrl.js
@@ -44008,15 +44051,396 @@ myApp.controller('indexCtrl', [
 
 myApp.controller('layoutCtrl', [
 		'$scope',
+		'$rootScope',
 		'$timeout',
 		'$location',
 		'$anchorScroll',
-		function($scope, $timeout, $location, $anchorScroll){
-			$scope.goto = function(id) {
+		'AuthService',
+		'Session',
+		function($scope, $rootScope, $timeout, $location, $anchorScroll, AuthService, Session) {
+			$scope.currentUser = Session.username;
+			$scope.currentRole = Session.userRole;
+			$scope.userId = Session.userId;
+
+			$scope.userLogin = function (credentials) {
+				AuthService.userLogin(credentials)
+						.then(function (data) {
+							$rootScope.$broadcast('refresh');
+						}, function (data) {
+							// 这里做点错误提示，用个modal啥的
+							console.log('login failed');
+						});
+			};
+
+			$scope.goto = function (id) {
 				$location.hash(id);	
 				$anchorScroll();
 			};
+
+			$scope.logout = function () {
+				AuthService.logout()
+					.then(function () {
+						refresh();
+					});
+			};
+
+			$scope.$on('refresh', refresh);
+			
+
+			function refresh() {
+				$scope.currentUser = Session.username;
+				$scope.currentRole = Session.userRole;
+				$scope.userId = Session.userId;
+			}
+
 	}]);
+/**
+ *  ./public/assets/js/controller/tagEditCtrl.js
+ *
+ *  @file    this controller is for index page.
+ *
+ *  @author  TH_Cloud
+ *	
+ */
+
+
+myApp.controller('tagEditCtrl', [
+		'$scope',
+		'$timeout',
+		'$location',
+		'$route',
+		'Pattern',
+		function($scope, $timeout, $location, $route, Pattern) {
+			$scope.tag = {
+				tagName: ''
+			};
+			$scope.pattern = Pattern;
+
+			$scope.addTag = function () {
+				$http.post('/tag', $scope.tag)
+					.then(successCallback, errorCallback);
+			};
+
+			$scope.updateTag = function () {
+				$http.put('/tag/' + $route.current.params.id, $scope.tag)
+					.then(successCallback, errorCallback);
+			};
+
+			$scope.deleteTag = function () {
+				$http.delete('/tag/' + $route.current.params.id)
+					.then(successCallback, errorCallback);
+			};
+
+			function fetchTag() {
+				$http.get('/tag/' + $route.current.params.id)
+					.then(function (res) {
+						if (res.data.errInfo) {
+							alert('failed');
+						} else {
+							$scope.tag = res.data;
+						}
+					}, errorCallback);
+			}
+
+			function successCallback(res) {
+				if (res.data.state == 'success') {
+					alert('success');
+				} else {
+					alert('failed');
+				}
+			}
+
+			function errorCallback(res) {
+				alert('network error');
+			}
+
+			function _init() {
+				if ($scope.pattern == 'edit') {
+					fetchTag();
+				}
+			}
+
+			_init();
+
+	}]);
+/**
+ *  ./public/assets/js/controller/taskEditCtrl.js
+ *
+ *  @file    this controller is for task edit page.
+ *
+ *  @author  TH_Cloud
+ *	
+ */
+
+
+myApp.controller('taskEditCtrl', [
+		'$scope',
+		'$timeout',
+		'$http',
+		'$route',
+		'$location',
+		'Pattern',
+		function($scope, $timeout, $http, $route, $location, Pattern){
+			$scope.pattern = Pattern;
+			$scope.task = {
+				taskName: "",
+				total: 2,
+				current: 1,
+				state: "unfinished",
+				statusName: [],
+				reporters: [],
+				tagName: "tag1",
+				description: ""
+			};
+			$scope.tags = [];
+
+			$scope.addTask = function () {
+				$http.post('/task', $scope.task)
+					.then(function (res) {
+						if (res.data.state == 'success') {
+							alert('success');
+							$location.path('/');
+						} else {
+							alert('failed');
+						}
+					}, function (res) {
+						alert('network error.');
+					});
+			};
+
+			$scope.updateTask = function () {
+				$http.put('/task/edit/' + $route.current.params.id)
+					.then(function (res) {
+						if (res.data.state == 'success') {
+							alert('success');
+							$location.path('/task/' + $route.current.params.id);
+						} else {
+							alert('failed');
+						}
+					}, errorCallback);
+			};
+
+			function fetchTaskInfo() {
+				$http.get('/task/edit/' + $route.current.params.id)
+					.then(function (res) {
+						$scope.task = res.data;
+					}, errorCallback);
+			}
+
+			function fetchTags() {
+				$http.get('/tag')
+					.then(function (res) {
+						$scope.tags = res.data;			
+					}, errorCallback);
+			}
+
+			function errorCallback(res) {
+				alert('network error');
+			}
+
+			function _init() {
+				if ($scope.pattern == 'edit') {
+					fetchTaskInfo();
+				}
+				fetchTags();
+				console.log("matched with taskEditCtrl");
+			}
+
+			_init();
+	}]);
+/**
+ *  ./public/assets/js/controller/taskInfoCtrl.js
+ *
+ *  @file    this controller is for taskInfo page.
+ *
+ *  @author  TH_Cloud
+ *	
+ */
+
+
+myApp.controller('taskInfoCtrl', [
+		'$scope',
+		'$http',
+		'Session',
+		'$route',
+		'$location',
+		'$timeout',
+		function($scope, $http, Session, $route, $location, $timeout){
+			$scope.task = {};
+			$scope.userRole = Session.userRole;
+			var path = "/task/edit/" + $route.current.params.id;
+
+			$scope.pushTask = function () {
+				$http.post(path, {})
+					.then(function (res) {
+						alert('success');
+						console.log(res);
+						$scope.task = res.data;
+					}, errorCallback);
+			};
+
+			$scope.deleteTask = function () {
+				$http.delete(path)
+					.then(function (res) {
+						alert('success');
+						$location.path('/main');
+					}, errorCallback);				
+			};
+
+			$scope.editTask = function () {
+				$location.path('/task/edit/' + $route.current.params.id);
+			};
+
+			function fetchTaskInfo() {	
+				$http.get(path)
+					.then(function (res) {
+						$scope.task = res.data;
+					}, errorCallback);
+			}
+
+			function errorCallback(res) {
+				alert('network failed.');
+			}
+
+			function _init() { 
+				fetchTaskInfo();
+				console.log("fetched with taskInfo Ctrl");
+			}
+
+			_init();
+		
+		}]);
+/**
+ *  ./public/assets/js/controller/userEditCtrl.js
+ *
+ *  @file    this controller is for index page.
+ *
+ *  @author  TH_Cloud
+ *	
+ */
+
+
+myApp.controller('userEditCtrl', [
+		'$scope',
+		'$timeout',
+		'$route',
+		'$http',
+		'Session',
+		function($scope, $timeout, $route, $http, Session){
+			$scope.username = '';
+			$scope.userRole = Session.userRole;
+			$scope.password = '';
+
+			$scope.updatePassword = function () {
+				var data = {
+					password: $scope.password
+				};
+				$http.put('/login', data)
+					.then(successCallback, errorCallback);
+			};
+
+			$scope.addUser = function () {
+				var data = {
+					username: $scope.username,
+					password: $scope.password
+				};
+				$http.put('/admin/add', data)
+					.then(successCallback, errorCallback);
+			};
+
+			function _init() {
+				if (Session.userRole == 'normal') {
+					$scope.username = Session.username;
+				}
+			}
+
+			function successCallback(res) {
+				if (res.data.state == 'success') {
+					alert('success');
+				} else {
+					alert('failed');
+				}
+			}
+
+			function errorCallback(res) {
+				alert('network error.');
+			}	
+
+			_init();
+	}]);
+/**
+ *  ./public/assets/js/services/AuthService.js
+ *
+ *  @file     Include the Auth service.
+ *
+ *  @author   TH_Cloud
+ *
+ */
+
+services.factory('AuthService', [
+		'$http',
+		'Session',
+		function ($http, Session) {
+			var authService = {};
+
+			authService.adminLogin = function (credentials) {
+				return $http.post('/admin', credentials)
+							.then(function (res) {
+								var data = res.data;
+								Session.create(data._id, data.username, 'admin');
+								return data;
+							});
+			};
+
+			authService.userLogin = function (credentials) {
+				return $http.post('/login', credentials)
+							.then(function (res) {
+								var data = res.data;
+								Session.create(data._id, data.username, 'normal');
+								return data;
+							});
+			};
+
+			authService.isLogined = function () {
+				return !!Session.username;
+			};
+
+			authService.isAdmin = function () {
+				return Session.userRole == 'admin';
+			};
+
+			authService.logout = function () {
+				return $http.get('/get')
+							.then(function (data) {
+								Session.destroy(); 
+							});
+			};
+
+			return authService;
+		}]);
+
+/**
+ *  ./public/assets/js/services/Session.js
+ *
+ *  @file     Include the Session service.
+ *
+ *  @author   TH_Cloud
+ *
+ */
+
+services.service('Session', function () {
+	this.create = function (userId, username, userRole) {
+		this.userId = userId;
+		this.username = username;
+		this.userRole = userRole;
+	};
+	this.destroy = function () {
+		this.userId = null;
+		this.username = null;
+		this.userRole = null;
+	};
+	return this;
+});
 /**
  * public/assets/js/route.js
  *
@@ -44035,12 +44459,66 @@ angular.module('myApp')
         function($routeProvider, $locationProvider) {
             $routeProvider
                 .when('/main', {
-                    templateUrl: 'main.html',
+                    templateUrl: '/views/main.html',
                     controller: 'indexCtrl',
                 })
                 .when('/error', {
                     templateUrl: 'error.html',
-                    controller: 'errorCtrl',
+                })
+                .when('/admin', {
+                    templateUrl: '/views/admin.html',
+                    controller: 'adminCtrl'
+                })
+                .when('/about', {
+                    templateUrl: 'about.html'
+                })
+                .when('/user/edit', {
+                    templateUrl: '/views/userEdit.html',
+                    controller: 'userEditCtrl'
+                })
+                .when('/user/edit/:id', {
+                    templateUrl: '/views/userEdit.html',
+                    controller: 'userEditCtrl'
+                })
+                .when('/tag/edit', {
+                    templateUrl: '/views/tagEdit.html',
+                    resolve: {
+                        Pattern: [function () {
+                            return 'add';
+                        }]
+                    },
+                    controller: 'tagEditCtrl'
+                })
+                .when('/tag/edit/:id', {
+                    templateUrl: '/views/tagEdit.html',
+                    resolve: {
+                        Pattern: [function () {
+                            return 'edit';
+                        }]
+                    },
+                    controller: 'tagEditCtrl'
+                })
+                .when('/task/edit', {
+                    templateUrl: '/views/taskEdit.html',
+                    resolve: {
+                        Pattern: [function () {
+                            return 'add';
+                        }]
+                    },
+                    controller: 'taskEditCtrl'
+                })
+                .when('/task/edit/:id', {
+                    templateUrl: '/views/taskEdit.html',
+                    resolve: {
+                        Pattern: [function () {
+                            return 'edit';
+                        }]
+                    },
+                    controller: 'taskEditCtrl'
+                })
+                .when('/task/:id', {
+                    templateUrl: '/views/taskInfo.html',
+                    controller: 'taskInfoCtrl'
                 })
                 .otherwise({
                     redirectTo: '/main'

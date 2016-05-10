@@ -1,5 +1,5 @@
 /**
- * ./config/build-config.js 	
+ * ./config/build-config.js     
  *
  * @file   this file contains the config used in gulp.
  *
@@ -14,14 +14,15 @@ var src = {
         './bower_components/bootstrap/dist/js/bootstrap.js',
         './bower_components/angular/angular.js',
         './bower_components/angular-route/angular-route.js',
+        './bower_components/angular-resource/angular-resource.js',
         
         './public/assets/js/app.js',
-	    './public/assets/js/controllers/*.js',
+        './public/assets/js/controllers/*.js',
         './public/assets/js/services/*.js',
         './public/assets/js/directives/*.js',
         './public/assets/js/route.js',
         './public/assets/js/i18n.js'
-	
+    
     ],
     css: [
         './bower_components/bootstrap/dist/css/bootstrap.css',
@@ -53,14 +54,14 @@ var del = [
 
 // core config entity.
 var conf = {
-	srcFiles: src,
-	buildPath: path,
-	concat: concat,
-	del: del
+    srcFiles: src,
+    buildPath: path,
+    concat: concat,
+    del: del
 };
 
 module.exports = function() {
-	return conf;
+    return conf;
 };
 
 

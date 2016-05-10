@@ -1,0 +1,44 @@
+<header class="jumbotron subhead">
+	<div class="container">
+		<h1>About</h1> 
+		<p class="lead">
+			<hr>
+		</p>
+		<p class="lead">
+			This app is based on MEAN.
+		</p>
+		<p class="lead">
+			You can see the source code on this
+			<a href="https://github.com/THCloud/MeanPro2.git"> repo.</a>
+		</p>
+	</div>
+</header>
+<div class="container">
+	<div class="page-header">
+		<h1>关于网站</h1>
+	</div>
+	<div>
+		<p class="lead">
+			该网站使用MEAN架构（Mongodb，Express，AngularJS，Node）创建。其中UI部分使用了Bootstrap。具体的参考可以在这个链接查看。
+			<a href="http://bootcss.com"> Bootstrap中文网</a>
+		</p>
+		<p class="lead">
+			其他使用的技术包括：gulp，npm，bower等。其中gulp用于控制文件管理，包括css合并压缩，js合并压缩，文件修改后自动重启服务器等。npm用于下载第三方扩展及管理，bower用于控制前端依赖。
+		</p>
+		<p class="lead">
+			毕设的主题是控制工作流，其实该网站主要努力方向为设计成通用，易用的网站模板，使得网站的某些架构，技术，通用于各种场景，因而在网站的目录结构，配置上下的功夫更大一些。最终希望的效果是，除了工作流，即使是创建博客，创建论坛，也可以直接down下该网站的代码，然后修改页面，修改数据库model，修改后台RESTFUL API，即可使用，无需在其他方面费力。
+		</p>
+		<p class="lead">
+			本网站的主版本使用的是jade视图模板，原因一是因为jade是express的默认配置模板，原因二是想熟悉某一样模板渲染技术。jade语法跟emmet通用，极易上手。然而jade其实不适用于这套框架，由于jade是后台渲染，所以在服务器的restful api必须预留get接口用于渲染模板。这样产生了一种矛盾的结果：Express希望他所有的处理都做成流，从流进入，经过express处理再通过流输出。网站前端视图也是处理的一部分，需经过express的处理。用jade也可以进行高效的模板复用。而angular希望致力做成前端mvc，网站模板既然属于前端，就应该属于前端控制，由angular的route来处理前端模板的加载。后台应只负责restful api，前后端要做的只有简单的json通信。使用jade属于选择前者，angular的route向后台请求模板。
+		</p>
+		<p class="lead">
+			我们也开发了使用原生html的版本。该版本尊重后者，绕过了express的视图引擎。使用ng-include指令也可以实现前端文件的高效复用。从前后端分离开发的角度上来说，该版本更试用于实际生产环境。然而出于时间原因，该版本的开发将于主版本后进行。
+		</p>
+		<p class="lead">
+			我们在网站的目录结构中添加了log，test等目录。可以用于日志生成，编写单元测试用例。在angular中也增加了i18n文件，可以用于国际化。这些在熟悉相关技术后再进行编写，现留作扩展功能。实际生产可以再添加nginx来进行负载均衡处理。
+		</p>
+		<p class="lead">
+			欢迎对网站进行批评与指教。
+		</p>
+	</div>
+</div>

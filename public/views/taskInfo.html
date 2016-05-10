@@ -1,0 +1,82 @@
+<header class="jumbotron subhead">
+	<div class="container">
+		<h1>{{ task.taskName }}</h1> 
+		<p class="lead">
+			<hr>
+		</p>
+		<p class="lead">
+			{{ task.description }}
+		</p>
+	</div>
+</header>
+
+<div class="container">
+	<div class="page-header">
+		<h1>任务详情</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h4>任务名称</h4>
+		</div>
+		<div class="col-sm-10">
+			<p>{{ task.taskName }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h4>任务标签</h4>
+		</div>
+		<div class="col-sm-10">
+			<p>{{ task.tagName }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h4>任务状态</h4>
+		</div>
+		<div class="col-sm-10">
+			<p>{{ task.state=="unfinished" ? "未完成" : "完成" }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h4>任务描述</h4>
+		</div>
+		<div class="col-sm-10 well">
+			<p>{{ task.description }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h4>任务进度</h4>
+		</div>
+		<div class="col-sm-10">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Status Name</th>
+						<th>Reporter Name</th>
+						<th>State</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="status in task.statusName">
+						<td>{{ $index+1 }}</td>
+						<td>{{ status }}</td>
+						<td>{{ task.reporters[$index] || "尚无" }}</td>
+						<td>
+							<span class="glyphicon" ng-class="{'glyphicon-ok': task.reporters[$index], 'glyphicon-remove': !task.reporters[$index]}"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<button class="btn btn-lg btn-success" ng-show="userRole=='normal'" ng-click="pushTask()">我要push</button>
+		<button class="btn btn-lg btn-primary" ng-show="userRole=='admin'" ng-click="editTask()">我要edit</button>
+		<button class="btn btn-lg btn-danger" ng-show="userRole=='admin'" ng-click="deleteTask()">我要delete</button>
+
+	</div>
+</div>

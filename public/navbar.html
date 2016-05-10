@@ -4,16 +4,45 @@
 			<span class="sr-only">toggle navigation</span> 
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
 		</button>
 		<a href="/main" class="navbar-brand">Graduation Project</a>
 	</div>
 	<div class="navbar-collapse collapse" id="navbar">
-		<ul class="nav navbar-nav navbar-right">
-			<li data-toggle="tab">
-				<a ng-click="goto('about')">关于</a>
+		<form name="userLoginForm" class="navbar-form navbar-right" ng-submit="userLogin(credentials)" novalidate ng-show="!currentUser">
+			<div class="form-group">
+				<input type="text" class="form-control" name="username" placeholder="用户名" ng-model="credentials.username" required>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" name="password" placeholder="密码" ng-model="credentials.password" required>
+			</div>
+			<button class="btn btn-success" type="submit" ng-disabled="userLoginForm.username.$invalid || userLoginForm.password.$invalid">登录</button>
+		</form>
+		<ul class="nav navbar-nav navbar-right" ng-show="currentUser">
+			<li>
+				<a>{{ currentUser }}您好！</a>
 			</li>
-			<li data-toggle="tab">
-				<a ng-click="goto('about')">联系我们</a>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" role="button">
+					个人设置
+				</a>
+				<ul class="dropdown-menu">
+					<li ng-show="currentRole=='normal'">
+						<a ng-href="/user/edit/{{userId}}">修改密码</a>
+					</li>
+					<li ng-show="currentRole=='admin'">
+						<a ng-href="/user/edit">添加用户</a>
+					</li>
+					<li ng-show="currentRole=='admin'">
+						<a ng-href="/tag/edit">添加标签</a>
+					</li>	
+					<li ng-show="currentRole=='admin'">
+						<a ng-href="/task/edit">添加任务</a>
+					</li>				
+					<li>
+						<a ng-click="logout()">退出</a>
+					</li>
+				</ul>
 			</li>
 		</ul>
 	</div>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Admin Login</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1" >
+		<meta name="description" content="mean spa">
+		<meta name="author" content="thcloud">
+		<base href="/">
+		<link rel="stylesheet" href="/dist/css/main.min.css">
+	</head>
+	<body ng-controller="adminCtrl" style="background: #eeeefe">
+		<div class="container">
+			<form class="form-signin" name="AdminLoginForm" novalidate>
+				<fieldset>
+					<div class="form-group">
+						<h1>
+							<img src="login.png">
+						</h1>
+					</div>
+					<div class="form-group">
+						<h1>Administrator</h1>
+					</div>
+					<div class="form-group">
+						<label for="username" class="sr-only">用户名</label>
+						<input type="text" class="form-control" name="username" placeholder="用户名" ng-model="credentials.username">
+					</div>
+					<div class="form-group">
+						<label for="password" class="sr-only">密码</label>
+						<input type="password" class="form-control" name="password" placeholder="密码" ng-model="credentials.password" required>
+					</div>
+					<button class="btn btn-lg btn-primary btn-block" type="button" ng-disabled="AdminLoginForm.username.$invalid || AdminLoginForm.password.$invalid" ng-click="adminLogin(credentials)">登 录</button>
+				</fieldset>
+			</form>
+		</div>
+		<script src="/dist/js/app.min.js"></script>
+	</body>
+</html>
