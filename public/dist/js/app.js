@@ -44183,14 +44183,14 @@ myApp.controller('taskEditCtrl', [
 		function($scope, $timeout, $http, $route, $location, Pattern){
 			$scope.pattern = Pattern;
 			$scope.task = {
-				taskName: "",
-				total: 2,
+				taskName: "test一下试一试",
+				total: 3,
 				current: 1,
 				state: "unfinished",
-				statusName: [],
+				statusName: ['先来一个', '再来一个'],
 				reporters: [],
 				tagName: "tag1",
-				description: ""
+				description: "在这里添加描述"
 			};
 			$scope.tags = [];
 
@@ -44209,7 +44209,7 @@ myApp.controller('taskEditCtrl', [
 			};
 
 			$scope.updateTask = function () {
-				$http.put('/task/edit/' + $route.current.params.id)
+				$http.put('/task/edit/' + $route.current.params.id, $scope.task)
 					.then(function (res) {
 						if (res.data.state == 'success') {
 							alert('success');
@@ -44218,6 +44218,16 @@ myApp.controller('taskEditCtrl', [
 							alert('failed');
 						}
 					}, errorCallback);
+			};
+
+			$scope.range = function (num) {
+				console.log("num is " + num);
+				var temp = [];
+				for(var i = 0; i < num; i++) {
+					temp.push(i);
+				}
+				console.log("temp is " + temp);
+				return temp;
 			};
 
 			function fetchTaskInfo() {
@@ -44243,7 +44253,7 @@ myApp.controller('taskEditCtrl', [
 					fetchTaskInfo();
 				}
 				fetchTags();
-				console.log("matched with taskEditCtrl");
+
 			}
 
 			_init();
